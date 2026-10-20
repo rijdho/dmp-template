@@ -21,8 +21,8 @@ identifiers:
     value: 10.5281/zenodo.23498569
     description: "Concept DOI, always resolves to the latest version"
   - type: doi
-    value: 10.5281/zenodo.23498570
-    description: "Version DOI for v0.1.0"
+    value: 10.5281/zenodo.23499863
+    description: "Version DOI for v0.2.0"
 repository-code: "https://github.com/rijdho/dmp-template"
 url: "https://rijdho.github.io/dmp-template/"
 license: MIT
