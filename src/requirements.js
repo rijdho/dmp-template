@@ -152,7 +152,7 @@ export const DATASET_FIELDS = Object.freeze([
   { key: 'security_and_privacy', tier: 'detail', q: '3b', type: 'objlist', prop: 'title', path: ['security_and_privacy'] },
   { key: 'rights', tier: 'detail', q: '4b', type: 'textarea', path: ['rights'] },
   // The licence's start date: "If date is set in the future, it indicates embargo period" (maDMP
-  // v1.2). Left empty, the publication date. Added 2026-10-20 from the IT:U template (Embargo).
+  // v1.2), the future being today's. Left empty, the publication date. Added 2026-10-20 from the IT:U template (Embargo).
   { key: 'license_start', tier: 'detail', q: '5a', type: 'date', path: [...DIST, 'license', 0, 'start_date'] },
   { key: 'preservation_statement', tier: 'detail', q: '5b', type: 'textarea', path: ['preservation_statement'] },
   { key: 'certified_with', tier: 'detail', q: '5b', type: 'enum', options: ['coretrustseal', 'din31644', 'dini-zertifikat', 'dsa', 'iso16363', 'iso16919', 'trac', 'wds'], path: [...HOST, 'certified_with'] },

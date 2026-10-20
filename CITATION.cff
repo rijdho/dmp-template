@@ -7,7 +7,7 @@ abstract: >-
   Europe's Practical Guide to the International Alignment of Research Data Management (2021)
   into dmp.json, a plan that validates against the RDA DMP Common Standard v1.2, and checks
   what the plan says about each dataset (DOI, access, licence, repository, formats, grant)
-  against the dataset's DOI record at DataCite, in the browser, on the command line, or as a
+  against the dataset's DataCite record, where DataCite holds it, in the browser, on the command line, or as a
   GitHub Action. Code under MIT; schema, examples and texts under CC BY 4.0.
 type: software
 authors:

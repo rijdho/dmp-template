@@ -10,7 +10,7 @@
        GitHub Pages cannot set headers, so clickjacking is not covered here. -->
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'none';
-    script-src 'sha256-x2/0nIwkpOmFIYoH8lqEusBeJ75e4DvQHVTuqfJt2A4=' 'sha256-URYEGvW3n82ogzZfnJn7cvkxJK+rvaOvyr5Eo0BJnV4=';
+    script-src 'sha256-x2/0nIwkpOmFIYoH8lqEusBeJ75e4DvQHVTuqfJt2A4=' 'sha256-QyISZG+aQNBdUOd1t0hHho/4zdNX+bvUBRtYN2x7Akg=';
     style-src 'sha256-g1nNROoRSllEtNn4IYewZY5RRBbyiU53/ob6NJzSOaI=';
     font-src data:;
     img-src 'self' data:;
@@ -938,7 +938,7 @@ const DATASET_FIELDS = Object.freeze([
   { key: 'security_and_privacy', tier: 'detail', q: '3b', type: 'objlist', prop: 'title', path: ['security_and_privacy'] },
   { key: 'rights', tier: 'detail', q: '4b', type: 'textarea', path: ['rights'] },
   // The licence's start date: "If date is set in the future, it indicates embargo period" (maDMP
-  // v1.2). Left empty, the publication date. Added 2026-10-20 from the IT:U template (Embargo).
+  // v1.2), the future being today's. Left empty, the publication date. Added 2026-10-20 from the IT:U template (Embargo).
   { key: 'license_start', tier: 'detail', q: '5a', type: 'date', path: [...DIST, 'license', 0, 'start_date'] },
   { key: 'preservation_statement', tier: 'detail', q: '5b', type: 'textarea', path: ['preservation_statement'] },
   { key: 'certified_with', tier: 'detail', q: '5b', type: 'enum', options: ['coretrustseal', 'din31644', 'dini-zertifikat', 'dsa', 'iso16363', 'iso16919', 'trac', 'wds'], path: [...HOST, 'certified_with'] },
@@ -2499,7 +2499,7 @@ const en = {
   'field.preservation_statement': 'Preservation',
   'field.certified_with': 'Certification of the repository',
   'field.available_until': 'Available until',
-  'field.license_start': 'Licence applies from (a later date than publication marks an embargo)',
+  'field.license_start': 'Licence applies from (a date in the future marks an embargo, as maDMP defines it)',
   'field.technical_resource': 'Tools needed to use the data (one per line)',
   'field.pid_system': 'Identifier systems of the repository (comma-separated)',
   'field.pid_system.ph': 'doi, handle',

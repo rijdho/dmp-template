@@ -108,7 +108,7 @@ export const en = {
   'field.preservation_statement': 'Preservation',
   'field.certified_with': 'Certification of the repository',
   'field.available_until': 'Available until',
-  'field.license_start': 'Licence applies from (a later date than publication marks an embargo)',
+  'field.license_start': 'Licence applies from (a date in the future marks an embargo, as maDMP defines it)',
   'field.technical_resource': 'Tools needed to use the data (one per line)',
   'field.pid_system': 'Identifier systems of the repository (comma-separated)',
   'field.pid_system.ph': 'doi, handle',

@@ -2,17 +2,17 @@
 // moves values between the DOM and those modules, which is what keeps the behaviour testable in
 // Node without a browser. Only datacite.js touches the network.
 
-import { DATASET_FIELDS, LICENCES, PLAN_FIELDS, QUESTIONS, QUESTION_IDS, SECTIONS, requiredQuestions } from './requirements.js?v=20';
+import { DATASET_FIELDS, LICENCES, PLAN_FIELDS, QUESTIONS, QUESTION_IDS, SECTIONS, requiredQuestions } from './requirements.js?v=21';
 import {
   completeness, createDataset, createPlan, currentVersion, editable, fieldValue, funderIdType, getIn, licenceKey,
   ID_TYPES, identifierAs, isLocalId, parsePlan, planToJson, planToMarkdown, saveVersion, setFieldValue, stamp, typedIdentifier,
   validatePlan, versionsOf,
-} from './plan.js?v=20';
-import { changeText, delays, diffPlans, diffToMarkdown } from './diff.js?v=20';
-import { checkPlan } from './evidence.js?v=20';
-import { MARK, formatReport } from './report.js?v=20';
-import { RegistryError, dataciteRegistry } from './datacite.js?v=20';
-import { LANGS, getLang, resolveLang, setLang, t } from './i18n/index.js?v=20';
+} from './plan.js?v=21';
+import { changeText, delays, diffPlans, diffToMarkdown } from './diff.js?v=21';
+import { checkPlan } from './evidence.js?v=21';
+import { MARK, formatReport } from './report.js?v=21';
+import { RegistryError, dataciteRegistry } from './datacite.js?v=21';
+import { LANGS, getLang, resolveLang, setLang, t } from './i18n/index.js?v=21';
 
 const $ = (id) => document.getElementById(id);
 const KEY = { draft: 'dmp-template:draft', lang: 'dmp-template:lang', theme: 'dmp-template:theme' };

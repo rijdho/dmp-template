@@ -10,8 +10,8 @@
 // identifier the dataset had before it got one, which plan.js keeps in `alternate_identifier`),
 // then by title. Pure.
 
-import { DATASET_FIELDS, PLAN_FIELDS, QUESTION_IDS } from './requirements.js?v=20';
-import { EXTENSION, currentVersion, fieldValue, getIn, issuedOf } from './plan.js?v=20';
+import { DATASET_FIELDS, PLAN_FIELDS, QUESTION_IDS } from './requirements.js?v=21';
+import { EXTENSION, currentVersion, fieldValue, getIn, issuedOf } from './plan.js?v=21';
 
 /** The plan-level fields compared, with a path and a label key each. */
 export const PLAN_META = Object.freeze([

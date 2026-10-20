@@ -12,9 +12,9 @@
 // and the version of this extension. Everything a machine can act on stays in the standard's
 // own fields.
 
-import { GUIDE, HE_SECTIONS, LICENCES, QUESTIONS, QUESTION_IDS, requiredQuestions } from './requirements.js?v=20';
-import { MADMP_SCHEMA } from './madmp-schema.js?v=20';
-import { realDate, validate } from './jsonschema.js?v=20';
+import { GUIDE, HE_SECTIONS, LICENCES, QUESTIONS, QUESTION_IDS, requiredQuestions } from './requirements.js?v=21';
+import { MADMP_SCHEMA } from './madmp-schema.js?v=21';
+import { realDate, validate } from './jsonschema.js?v=21';
 
 export const SCHEMA_VERSION = '0.1.0';
 export const SCHEMA_ID = 'https://rijdho.github.io/dmp-template/schema/dmp.schema.json';

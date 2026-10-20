@@ -30,7 +30,7 @@ against a software repository.
   fill in the project and its grant, and list the datasets: DOI, access, publication date,
   repository, licence, formats. Optional detail under each question and dataset fills the
   other maDMP fields: metadata standards and their language, quality measures, backup,
-  certification, tools, people, costs, and a licence start date, which marks an embargo.
+  certification, tools, people, costs, and a licence start date, which marks an embargo when it lies in the future.
   Download the result as `dmp.json` and as `DMP.md` for people, either in Science Europe's six
   sections or with the same answers filed under the sections of the Horizon Europe DMP template.
   Which question goes under which Horizon Europe section is this tool's reading

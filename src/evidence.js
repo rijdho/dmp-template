@@ -25,8 +25,8 @@
 // Pure apart from the view. `today` is passed in, never taken from the clock, so a test of a
 // date means the same thing next year.
 
-import { requiredQuestions } from './requirements.js?v=20';
-import { datasetDoi, fundrefNumber, isLocalId, issuedOf, licenceKey, licenceSpdx, normaliseDoi, normaliseOrcid } from './plan.js?v=20';
+import { requiredQuestions } from './requirements.js?v=21';
+import { datasetDoi, fundrefNumber, isLocalId, issuedOf, licenceKey, licenceSpdx, normaliseDoi, normaliseOrcid } from './plan.js?v=21';
 
 /** What a single check found. `declared`: the plan says it, the record cannot confirm or refute it. */
 export const OUTCOMES = Object.freeze(['evidenced', 'missing', 'pending', 'declared']);
