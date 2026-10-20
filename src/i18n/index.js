@@ -11,7 +11,7 @@
 // English only for now. The structure stays: a locale is one more file here and one more
 // entry in LOCALES and LANGS, and the i18n test then holds it to the English key set.
 
-import { en } from './en.js?v=19';
+import { en } from './en.js?v=20';
 
 export const LOCALES = { en };
 

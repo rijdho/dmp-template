@@ -15,6 +15,14 @@ authors:
     given-names: "Ricardo"
     alias: rijdho
     orcid: "https://orcid.org/0000-0001-5058-9309"
+doi: 10.5281/zenodo.23498569
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.23498569
+    description: "Concept DOI, always resolves to the latest version"
+  - type: doi
+    value: 10.5281/zenodo.23498570
+    description: "Version DOI for v0.1.0"
 repository-code: "https://github.com/rijdho/dmp-template"
 url: "https://rijdho.github.io/dmp-template/"
 license: MIT

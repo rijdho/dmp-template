@@ -1,5 +1,7 @@
 # Actionable DMP
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23498569.svg)](https://doi.org/10.5281/zenodo.23498569)
+
 **Write a data management plan as a machine-actionable file, and check what the plan says
 about each dataset against the dataset's DOI record.**
 
@@ -230,5 +232,5 @@ licence. [`NOTICE`](NOTICE) carries the details.
 ## Citation
 
 If you use this tool, please cite it: see [`CITATION.cff`](CITATION.cff) or the "Cite this
-repository" button. It is not yet archived on Zenodo; the concept DOI will be added here when it
-is.
+repository" button. Archived on Zenodo: concept DOI
+[10.5281/zenodo.23498569](https://doi.org/10.5281/zenodo.23498569) (always resolves to the latest version).
