@@ -1,0 +1,34 @@
+name: Check Data Management Plan
+description: Fail the build when a dataset the dmp.json says is published does not match its DOI record at DataCite.
+author: Ricardo Hartley Belmar
+branding:
+  icon: check-square
+  color: purple
+
+inputs:
+  plan:
+    description: Path of the plan, relative to the repository root.
+    default: dmp.json
+  strict:
+    description: Also fail on datasets that are only planned.
+    default: 'false'
+  offline:
+    description: Only validate the plan; do not read DOI records.
+    default: 'false'
+
+runs:
+  using: composite
+  steps:
+    # Inputs travel as environment variables, never interpolated into the script, so a plan
+    # path cannot inject shell. The checkout is the caller's job (actions/checkout), and the
+    # runner's own Node runs the checker: it has no dependencies to install.
+    - shell: bash
+      env:
+        DMP_PLAN: ${{ inputs.plan }}
+        DMP_STRICT: ${{ inputs.strict }}
+        DMP_OFFLINE: ${{ inputs.offline }}
+      run: |
+        args=("$GITHUB_WORKSPACE/$DMP_PLAN")
+        if [ "$DMP_STRICT" = "true" ]; then args+=(--strict); fi
+        if [ "$DMP_OFFLINE" = "true" ]; then args+=(--offline); fi
+        node "$GITHUB_ACTION_PATH/bin/dmp-check.mjs" "${args[@]}"

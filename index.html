@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Writing a plan touches no network at all; checking one talks to DataCite and, only for a
+       DOI that DataCite does not hold, to doi.org, to ask who registered it. Saying so in a policy the browser enforces turns that promise into a
+       guarantee: a font CDN slipped in by accident, or an escape missed in a future edit, is
+       blocked rather than silently working. `frame-ancestors` is ignored in a meta tag and
+       GitHub Pages cannot set headers, so clickjacking is not covered here. -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'none';
+    script-src 'self';
+    style-src 'self';
+    font-src 'self';
+    img-src 'self' data:;
+    connect-src https://api.datacite.org https://doi.org;
+    form-action 'none';
+    base-uri 'none';
+    object-src 'none'" />
+  <title>Actionable DMP: a data management plan a machine can check</title>
+  <meta name="description" data-i18n-attr="content:meta.description"
+        content="Write a data management plan as a machine-actionable dmp.json (RDA DMP Common Standard), following Science Europe’s core requirements, and check what the plan says about its datasets against their DOI records." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%236d4aff'/%3E%3Ctext x='16' y='21' font-size='11' text-anchor='middle' fill='%23ffffff' font-family='monospace' font-weight='bold'%3EDMP%3C/text%3E%3C/svg%3E" />
+  <!-- The shared look (a synced copy of the house style), then this tool's own styles. -->
+  <link rel="stylesheet" href="./house/house.css?v=19" />
+  <link rel="stylesheet" href="./style.css?v=19" />
+  <script src="./src/theme-boot.js?v=19"></script>
+</head>
+<body>
+  <div class="app" id="app">
+    <aside class="rail" id="rail">
+      <div class="brand-mark">
+        <a class="brand-glyph" href="./" tabindex="-1" aria-hidden="true"></a>
+        <div>
+          <p class="brand-name"><a href="./">Actionable DMP</a></p>
+          <a class="brand-sub" href="https://rijdho.github.io">rijdho.github.io</a>
+        </div>
+      </div>
+      <p class="nav-label" data-i18n="nav.label">View</p>
+      <nav aria-label="View" data-i18n-attr="aria-label:nav.label">
+        <button class="nav-item active" data-view="plan" type="button">
+          <span class="nav-step">01</span><span data-i18n="nav.plan">Write the plan</span></button>
+        <button class="nav-item" data-view="check" type="button">
+          <span class="nav-step">02</span><span data-i18n="nav.check">Check the plan</span></button>
+        <button class="nav-item" data-view="compare" type="button">
+          <span class="nav-step">03</span><span data-i18n="nav.compare">Compare versions</span></button>
+        <button class="nav-item" data-view="how" type="button">
+          <span class="nav-step">04</span><span data-i18n="how.title">How it works</span></button>
+        <button class="nav-item" data-view="caveats" type="button">
+          <span class="nav-step">05</span><span data-i18n="caveats.title">Caveats</span></button>
+        <button class="nav-item" data-view="about" type="button">
+          <span class="nav-step">06</span><span data-i18n="about.title">About</span></button>
+      </nav>
+      <div class="rail-foot">
+        <span data-i18n-html="rail.by">By Ricardo Hartley Belmar</span><br />
+        <span data-i18n="rail.license.code">Code under MIT</span><br />
+        <span data-i18n="rail.license.data">schema and texts under CC BY 4.0</span><br />
+        <a href="https://github.com/rijdho/dmp-template" target="_blank" rel="noreferrer" data-i18n="rail.source">Source on GitHub</a>
+      </div>
+    </aside>
+    <button class="rail-backdrop" id="rail-backdrop" type="button" tabindex="-1" aria-hidden="true"></button>
+    <div class="main-col">
+      <div class="cmdbar">
+        <button class="menu-btn" id="menu" type="button" aria-controls="rail" aria-expanded="false"
+                aria-label="Open the menu" data-i18n-attr="aria-label:ui.menu.aria">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+        </button>
+        <h1 class="cmd-title" id="cmd-title" data-i18n="nav.plan">Write the plan</h1>
+        <div class="cmd-spacer"></div>
+        <nav class="langs" id="lang" aria-label="Language" data-i18n-attr="aria-label:ui.lang.aria"></nav>
+        <a class="ghost-btn" href="https://github.com/rijdho/dmp-template" target="_blank" rel="noreferrer"
+           data-i18n="ui.brand.source">source ↗</a>
+        <button class="icon-btn" id="theme" type="button" aria-label="Toggle light/dark theme"
+                data-i18n-attr="title:ui.theme.title;aria-label:ui.theme.aria">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.6 6.6 0 0 0 9.8 9.8Z" /></svg>
+        </button>
+      </div>
+      <main class="content">
+        <div class="content-inner">
+
+          <!-- ── 01 Write the plan ─────────────────────────────────────────── -->
+          <section class="view" data-view="plan">
+            <p class="eyebrow" data-i18n="ui.brand.tagline">A data management plan a machine can check</p>
+            <p class="lede" data-i18n-html="ui.lede"></p>
+
+            <!-- Starting a plan: open an existing one, or clear this one. Finishing it is at the bottom. -->
+            <div class="toolbar" id="toolbar">
+              <label class="btn ghost file-btn"><span data-i18n="plan.import">Open a dmp.json</span>
+                <input type="file" id="import-file" accept=".json,application/json" /></label>
+              <span class="validity" id="import-status" aria-live="polite"></span>
+              <div class="cmd-spacer"></div>
+              <button class="btn ghost danger-quiet" id="new-plan" type="button" data-i18n="plan.new">Start over</button>
+            </div>
+            <p class="hint toolbar-hint" data-i18n="plan.import.hint"></p>
+
+            <section class="panel" id="meta">
+              <h2 class="panel-title" data-i18n="plan.meta.title">About the plan</h2>
+              <div class="grid2">
+                <label class="field span2"><span data-i18n="plan.title.label">Title of the plan</span>
+                  <input class="input" data-bind="title" autocomplete="off"
+                         data-i18n-attr="placeholder:plan.title.ph" placeholder="Data Management Plan for …" /></label>
+                <label class="field"><span data-i18n="plan.contact.label">Contact person</span>
+                  <input class="input" data-bind="contact.name" autocomplete="off" /></label>
+                <label class="field"><span data-i18n="plan.mbox.label">Contact e-mail</span>
+                  <input class="input" data-bind="contact.mbox" type="email" autocomplete="off" /></label>
+                <label class="field"><span data-i18n="plan.orcid.label">Contact ORCID iD</span>
+                  <input class="input" data-bind="contact.contact_id.identifier" autocomplete="off" spellcheck="false"
+                         data-i18n-attr="placeholder:plan.orcid.ph" placeholder="0000-0000-0000-0000" /></label>
+                <label class="field"><span data-i18n="plan.lang.label">Language of the plan (ISO 639-3)</span>
+                  <input class="input" data-bind="language" autocomplete="off" spellcheck="false" maxlength="3" /></label>
+                <p class="hint span2" data-i18n="plan.contact.hint"></p>
+                <div class="field"><label for="dmp-id" data-i18n="plan.dmpId.label">Identifier of the plan, once it has one</label>
+                  <div class="id-row">
+                    <input class="input" id="dmp-id" data-bind="dmp_id" autocomplete="off" spellcheck="false"
+                           data-i18n-attr="placeholder:plan.dmpId.ph" />
+                    <select class="input id-type" id="dmp-id-type" data-bind="dmp_id_type"
+                            data-i18n-attr="aria-label:plan.dmpId.typeLabel;title:plan.dmpId.typeLabel"></select>
+                  </div>
+                  <span class="hint" data-i18n="plan.dmpId.hint"></span></div>
+                <label class="field"><span data-i18n="plan.ethics.label">Are there ethical issues?</span>
+                  <select class="input" data-bind="ethical_issues_exist" id="ethics"></select></label>
+              </div>
+            </section>
+
+            <section class="panel" id="project">
+              <h2 class="panel-title" data-i18n="plan.project.title">Project and funding</h2>
+              <div class="grid2">
+                <label class="field span2"><span data-i18n="plan.project.label">Project title</span>
+                  <input class="input" data-bind="project.0.title" autocomplete="off" /></label>
+                <label class="field"><span data-i18n="plan.start.label">Start</span>
+                  <input class="input" type="date" data-bind="project.0.start" /></label>
+                <label class="field"><span data-i18n="plan.end.label">End</span>
+                  <input class="input" type="date" data-bind="project.0.end" /></label>
+                <label class="field"><span data-i18n="plan.funder.label">Funder ID</span>
+                  <input class="input" data-bind="project.0.funding.0.funder_id.identifier" autocomplete="off" spellcheck="false"
+                         data-i18n-attr="placeholder:plan.funder.ph" /></label>
+                <label class="field"><span data-i18n="plan.grant.label">Grant number</span>
+                  <input class="input" data-bind="project.0.funding.0.grant_id.identifier" autocomplete="off" spellcheck="false"
+                         data-i18n-attr="placeholder:plan.grant.ph" /></label>
+                <label class="field"><span data-i18n="plan.status.label">Funding status</span>
+                  <select class="input" data-bind="project.0.funding.0.funding_status" id="funding-status"></select></label>
+                <p class="hint span2" data-i18n="plan.grant.hint"></p>
+              </div>
+            </section>
+
+            <div class="reqs-head">
+              <h2 class="panel-title" data-i18n="plan.questions.title">The fifteen questions</h2>
+              <span class="muted mono" id="q-count"></span>
+            </div>
+            <div id="questions"></div>
+
+            <div class="reqs-head">
+              <h2 class="panel-title" data-i18n="plan.datasets.title">Datasets</h2>
+              <span class="muted mono" id="ds-count"></span>
+            </div>
+            <p class="hint ds-lede" data-i18n="plan.datasets.lede"></p>
+            <div id="datasets"></div>
+            <div class="toolbar">
+              <button class="btn ghost" id="add-dataset" type="button" data-i18n="plan.datasets.add">Add a dataset</button>
+            </div>
+
+            <!-- Saving a version: a numbered, dated snapshot kept in the file. -->
+            <section class="panel" id="versions">
+              <h2 class="panel-title" data-i18n="ver.title">Versions</h2>
+              <p class="hint" data-i18n="ver.lede"></p>
+              <ul class="versions" id="ver-list"></ul>
+              <p class="hint" id="ver-changed" hidden></p>
+              <div class="ver-save">
+                <label class="field"><span data-i18n="ver.note.label">What changed</span>
+                  <input class="input" id="ver-note" autocomplete="off" data-i18n-attr="placeholder:ver.note.ph" /></label>
+                <button class="btn ghost" id="ver-save" type="button"></button>
+              </div>
+              <span class="validity" id="ver-status" aria-live="polite"></span>
+            </section>
+
+            <!-- Finishing a plan: what is still wrong with it, then what to do with it. -->
+            <section class="panel finish">
+              <div class="validity" id="validity" aria-live="polite"></div>
+              <div class="validity" id="completeness"></div>
+              <ul class="problems" id="problems" hidden></ul>
+              <div class="toolbar">
+                <button class="btn" id="dl-json" type="button" data-i18n="plan.dl.json">Download dmp.json</button>
+                <button class="btn ghost" id="dl-md" type="button" data-i18n="plan.dl.md">Download DMP.md</button>
+                <button class="btn ghost" id="dl-md-he" type="button" data-i18n="plan.dl.mdHe">DMP.md in Horizon Europe sections</button>
+                <button class="btn ghost" id="to-check" type="button" data-i18n="plan.toCheck">Check this plan</button>
+              </div>
+            </section>
+          </section>
+
+          <!-- ── 02 Check the plan ─────────────────────────────────────────── -->
+          <section class="view" data-view="check" hidden>
+            <p class="eyebrow" data-i18n="check.eyebrow">The check</p>
+            <p class="lede" data-i18n-html="check.lede"></p>
+            <form class="panel" id="check-form" novalidate>
+              <div class="field">
+                <span data-i18n="check.source.label">Plan to check</span>
+                <div class="radios" role="radiogroup" data-i18n-attr="aria-label:check.source.label">
+                  <label class="chk"><input type="radio" name="source" value="editor" checked />
+                    <span data-i18n="check.source.editor">The plan in the editor</span></label>
+                  <label class="chk"><input type="radio" name="source" value="file" />
+                    <span data-i18n="check.source.file">A dmp.json file</span></label>
+                </div>
+              </div>
+              <label class="field" id="check-file-field" hidden><span data-i18n="check.file.label">File</span>
+                <input class="input" type="file" id="check-file" accept=".json,application/json" /></label>
+              <div class="actions">
+                <button class="btn" id="check-go" type="submit" data-i18n="check.go">Check</button>
+                <span class="muted" id="check-status" aria-live="polite"></span>
+              </div>
+              <div class="msg" id="check-error" hidden></div>
+            </form>
+
+            <section class="panel" id="check-results" hidden aria-live="polite">
+              <div class="panel-h">
+                <h2 class="panel-title" data-i18n="check.results">Result</h2>
+                <span class="muted mono" id="check-of"></span>
+              </div>
+              <div class="result-actions">
+                <button class="btn ghost small" id="dl-report" type="button" data-i18n="check.dlReport">Download report (.md)</button>
+                <button class="btn ghost small" id="to-editor" type="button" hidden data-i18n="check.toEditor">Open this plan in the editor</button>
+              </div>
+              <div class="stats" id="check-stats"></div>
+              <div class="notes" id="check-notes"></div>
+              <ul class="problems" id="check-problems" hidden></ul>
+              <div id="check-plan"></div>
+              <div id="check-list"></div>
+              <div id="check-unlisted"></div>
+            </section>
+
+            <section class="panel">
+              <h2 class="panel-title" data-i18n="check.action.title">Run the same check in CI</h2>
+              <p class="hint" data-i18n="check.action.lede"></p>
+              <pre class="code"><code>on:
+  schedule: [{ cron: '0 6 * * 1' }]
+jobs:
+  dmp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: rijdho/dmp-template@main
+        with:
+          plan: dmp.json</code></pre>
+            </section>
+          </section>
+
+          <!-- ── 03 Compare versions ───────────────────────────────────────── -->
+          <section class="view" data-view="compare" hidden>
+            <p class="eyebrow" data-i18n="cmp.eyebrow">Versions</p>
+            <p class="lede" data-i18n="cmp.lede"></p>
+            <form class="panel" id="cmp-form" novalidate>
+              <label class="field"><span data-i18n="cmp.before.label">Earlier version</span>
+                <input class="input" type="file" id="cmp-before" accept=".json,application/json" /></label>
+              <div class="field">
+                <span data-i18n="cmp.after.label">Later version</span>
+                <div class="radios" role="radiogroup" data-i18n-attr="aria-label:cmp.after.label">
+                  <label class="chk"><input type="radio" name="cmp-after" value="editor" checked />
+                    <span data-i18n="cmp.after.editor">The plan in the editor</span></label>
+                  <label class="chk"><input type="radio" name="cmp-after" value="file" />
+                    <span data-i18n="cmp.after.file">Another dmp.json file</span></label>
+                </div>
+              </div>
+              <label class="field" id="cmp-after-field" hidden><span data-i18n="cmp.after.file">File</span>
+                <input class="input" type="file" id="cmp-after-file" accept=".json,application/json" /></label>
+              <div class="actions">
+                <button class="btn" type="submit" data-i18n="cmp.go">Compare</button>
+              </div>
+              <div class="msg" id="cmp-error" hidden></div>
+            </form>
+            <section class="panel" id="cmp-results" hidden aria-live="polite">
+              <div class="panel-h">
+                <h2 class="panel-title" data-i18n="cmp.results">Changes</h2>
+                <span class="muted mono" id="cmp-of"></span>
+              </div>
+              <div class="result-actions">
+                <button class="btn ghost small" id="cmp-dl" type="button" data-i18n="cmp.dl">Download the changes (.md)</button>
+              </div>
+              <div id="cmp-delays"></div>
+              <ul class="changes" id="cmp-list"></ul>
+            </section>
+          </section>
+
+          <!-- ── 04 How it works ───────────────────────────────────────────── -->
+          <section class="view prose" data-view="how" hidden>
+            <p class="eyebrow" data-i18n="how.eyebrow">Method</p>
+            <p class="lede" data-i18n="how.lede"></p>
+            <h2 data-i18n="how.q.title">Six requirements, fifteen questions</h2>
+            <p data-i18n-html="how.q.body"></p>
+            <div class="tablewrap"><table class="req-table" id="q-table"></table></div>
+            <h2 data-i18n="how.req.title">Required and optional</h2>
+            <p data-i18n-html="how.req.body"></p>
+            <h2 data-i18n="how.claim.title">When a statement becomes a claim</h2>
+            <p data-i18n-html="how.claim.body"></p>
+            <h2 data-i18n="how.checks.title">What is compared</h2>
+            <p data-i18n-html="how.checks.body"></p>
+            <h2 data-i18n="how.file.title">The file</h2>
+            <p data-i18n-html="how.file.body"></p>
+            <p><a href="./schema/dmp.schema.json" target="_blank" rel="noreferrer">schema/dmp.schema.json</a>
+              · <a href="./schema/maDMP-schema-1.2.json" target="_blank" rel="noreferrer">schema/maDMP-schema-1.2.json</a></p>
+            <h2 data-i18n="how.versions.title">Versions</h2>
+            <p data-i18n-html="how.versions.body"></p>
+            <h2 data-i18n="how.guide.title">Where the guide words a question twice</h2>
+            <p data-i18n-html="how.guide.body"></p>
+            <h2 data-i18n="how.cli.title">The same check on the command line and in CI</h2>
+            <pre class="code"><code>node bin/dmp-check.mjs [dmp.json] [--strict] [--offline] [--no-unlisted] [--format text|md|json]</code></pre>
+            <h2 data-i18n="how.related.title">Related work</h2>
+            <p data-i18n-html="how.related.body"></p>
+          </section>
+
+          <!-- ── 05 Caveats ────────────────────────────────────────────────── -->
+          <section class="view prose" data-view="caveats" hidden>
+            <p class="eyebrow" data-i18n="caveats.eyebrow">Limits</p>
+            <p class="lede" data-i18n="caveats.lede"></p>
+            <ul class="caveats">
+              <li data-i18n-html="caveats.1"></li>
+              <li data-i18n-html="caveats.2"></li>
+              <li data-i18n-html="caveats.3"></li>
+              <li data-i18n-html="caveats.4"></li>
+              <li data-i18n-html="caveats.5"></li>
+              <li data-i18n-html="caveats.6"></li>
+            </ul>
+          </section>
+
+          <!-- ── 06 About ──────────────────────────────────────────────────── -->
+          <section class="view prose" data-view="about" hidden>
+            <p class="eyebrow" data-i18n="about.eyebrow">About</p>
+            <p data-i18n-html="about.p1"></p>
+            <p data-i18n-html="about.p2"></p>
+            <p data-i18n-html="about.p3"></p>
+          </section>
+
+        </div>
+      </main>
+    </div>
+  </div>
+  <script type="module" src="./src/app.js?v=19"></script>
+</body>
+</html>

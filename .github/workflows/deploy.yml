@@ -1,0 +1,58 @@
+name: Deploy to GitHub Pages
+
+# Static app, no build step: the repository tree is served as it is. The job exists to
+# (a) gate the deploy on the test suite and on the repository's own plan, and (b) bypass the
+# legacy Jekyll builder.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      # No package.json: the suite runs on Node's built-in runner, dependency-free.
+      - run: node --test tests/*.test.mjs
+      # The worked examples stay valid plans, through the same Action the repository publishes.
+      # Offline: their DOIs use DataCite's test prefix, and CI should not depend on a network.
+      - uses: ./
+        with:
+          plan: examples/open-data.json
+          offline: true
+      - uses: ./
+        with:
+          plan: examples/personal-data.json
+          offline: true
+      - if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+  deploy:
+    needs: test
+    # Pages cannot be enabled on a private repository; the day it goes public this job starts
+    # running on its own. The first deploy after that still needs a manual dispatch.
+    if: github.event_name != 'pull_request' && github.event.repository.private == false
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

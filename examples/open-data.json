@@ -1,0 +1,100 @@
+{
+  "$schema": "https://rijdho.github.io/dmp-template/schema/dmp.schema.json",
+  "dmp": {
+    "title": "AeroSense Data Management Plan",
+    "description": "Worked example: open sensor data. All content is synthetic; the DOIs use DataCite's test prefix 10.5072 and resolve nowhere.",
+    "language": "eng",
+    "created": "2026-07-16T09:00:00Z",
+    "modified": "2026-10-20T09:00:00Z",
+    "dmp_id": { "identifier": "urn:uuid:4f0c8a52-2b7e-4d55-9a1e-6f3b0d1c2a77", "type": "other" },
+    "contact": {
+      "name": "Josiah Carberry",
+      "mbox": "contact@example.org",
+      "contact_id": { "identifier": "0000-0002-1825-0097", "type": "orcid" }
+    },
+    "contributor": [
+      { "name": "Example Steward", "mbox": "steward@example.org", "role": ["DataManager"], "contributor_id": { "identifier": "https://example.org/people/steward", "type": "url" } }
+    ],
+    "ethical_issues_exist": "no",
+    "cost": [
+      { "title": "Repository deposit and storage", "value": 2000, "currency_code": "EUR" }
+    ],
+    "project": [
+      {
+        "title": "AeroSense",
+        "start": "2026-01-01",
+        "end": "2028-12-31",
+        "funding": [
+          {
+            "funder_id": { "identifier": "https://funder.example.org", "type": "url" },
+            "grant_id": { "identifier": "EXAMPLE-AERO-001", "type": "other" },
+            "funding_status": "granted"
+          }
+        ]
+      }
+    ],
+    "dataset": [
+      {
+        "title": "AeroSense sensor readings",
+        "type": "dataset",
+        "description": "Air-quality readings from twelve field stations, one row per station and minute.",
+        "dataset_id": { "identifier": "10.5072/example.aerosense.1", "type": "doi" },
+        "personal_data": "no",
+        "sensitive_data": "no",
+        "keyword": ["air quality", "sensors"],
+        "data_quality_assurance": ["Readings outside the sensors' calibrated ranges are flagged, not removed."],
+        "preservation_statement": "Kept for at least ten years after the project ends, in the repository named below.",
+        "distribution": [
+          {
+            "title": "AeroSense sensor readings (CSV)",
+            "data_access": "open",
+            "issued": "2027-06-30",
+            "format": ["text/csv"],
+            "byte_size": 5000000000,
+            "license": [{ "license_ref": "https://creativecommons.org/licenses/by/4.0/", "start_date": "2027-06-30" }],
+            "host": { "title": "Zenodo", "url": "https://zenodo.org", "pid_system": ["doi"] }
+          }
+        ]
+      },
+      {
+        "title": "AeroSense calibration log",
+        "type": "dataset",
+        "description": "Calibration runs for every sensor, with the reference instrument's readings.",
+        "dataset_id": { "identifier": "10.5072/example.aerosense.2", "type": "doi" },
+        "personal_data": "no",
+        "sensitive_data": "no",
+        "distribution": [
+          {
+            "title": "AeroSense calibration log (JSON)",
+            "data_access": "open",
+            "issued": "2027-06-30",
+            "format": ["application/json"],
+            "license": [{ "license_ref": "https://creativecommons.org/publicdomain/zero/1.0/", "start_date": "2027-06-30" }],
+            "host": { "title": "Zenodo", "url": "https://zenodo.org" }
+          }
+        ]
+      }
+    ],
+    "actionable_dmp": {
+      "schema_version": "0.1.0",
+      "guide": { "title": "Practical Guide to the International Alignment of Research Data Management", "doi": "10.5281/zenodo.4915861" },
+      "answers": {
+        "1a": "New data are collected by twelve field stations running the project's logging software; no existing data are re-used. Provenance is recorded per reading: station, sensor serial number and firmware version.",
+        "1b": "Numeric time series in CSV, about 5 GB over the project, and a calibration log in JSON. CSV is chosen because every analysis tool reads it and the repository lists it as a preferred format.",
+        "2a": "Each deposit carries DataCite metadata and a README describing columns, units and station locations. Files are named by station and month.",
+        "2b": "Readings outside the calibrated range of a sensor are flagged in a quality column; sensors are recalibrated every three months against a reference instrument.",
+        "3a": "During the project the data are kept on the institution's managed research storage, which is backed up nightly to a second site.",
+        "3b": "The data hold no personal or sensitive information. Write access is limited to the project team.",
+        "4a": "No personal data are processed.",
+        "4b": "The data are owned by the project's institution and released under CC BY 4.0 (the readings) and CC0 (the calibration log). No third-party data are used.",
+        "4c": "No ethical issues are expected; the stations measure air on public land with the owners' permission.",
+        "5a": "Both datasets are deposited openly in Zenodo at the end of the second project year, without embargo.",
+        "5b": "All readings and the full calibration log are kept, since they cannot be measured again. Zenodo preserves them for the lifetime of the repository.",
+        "5c": "Any tool that reads CSV and JSON; the README names none in particular.",
+        "5d": "Zenodo assigns a DOI to each deposit; the DOIs are reserved in advance and recorded in this plan.",
+        "6a": "The project's data steward is responsible for carrying out and updating this plan, with the principal investigator.",
+        "6b": "Deposit in Zenodo is free; about two weeks of the data steward's time is budgeted for preparing the deposits."
+      }
+    }
+  }
+}

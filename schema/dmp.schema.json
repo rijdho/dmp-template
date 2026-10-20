@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rijdho.github.io/dmp-template/schema/dmp.schema.json",
+  "title": "Actionable DMP",
+  "description": "dmp.json, extension schema version 0.1.0: a machine-actionable DMP after the RDA DMP Common Standard v1.2 (maDMP-schema-1.2.json, next to this file), plus the answers to the fifteen questions of Science Europe's Practical Guide to the International Alignment of Research Data Management (https://doi.org/10.5281/zenodo.4915862) in dmp.actionable_dmp. Generated from src/requirements.js; do not edit by hand. CC BY 4.0.",
+  "allOf": [
+    {
+      "$ref": "maDMP-schema-1.2.json"
+    }
+  ],
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "dmp": {
+      "type": "object",
+      "properties": {
+        "actionable_dmp": {
+          "type": "object",
+          "description": "Added by Actionable DMP. Everything a machine can act on stays in the standard maDMP fields.",
+          "required": [
+            "schema_version",
+            "answers"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "schema_version": {
+              "type": "string",
+              "const": "0.1.0"
+            },
+            "guide": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "doi": {
+                  "type": "string"
+                }
+              }
+            },
+            "answers": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "1a": {
+                  "type": "string",
+                  "description": "Science Europe core requirement 1, question 1a."
+                },
+                "1b": {
+                  "type": "string",
+                  "description": "Science Europe core requirement 1, question 1b."
+                },
+                "2a": {
+                  "type": "string",
+                  "description": "Science Europe core requirement 2, question 2a."
+                },
+                "2b": {
+                  "type": "string",
+                  "description": "Science Europe core requirement 2, question 2b."
+                },
+                "3a": {
+                  "type": "string",
+                  "description": "Science Europe core requirement 3, question 3a."
+                },
+                "3b": {
+                  "type": "string",
+                  "description": "Science Europe core requirement 3, question 3b."
+                },
+                "4a": {
+                  "type": "string",
+                  "description": "Science Europe core requirement 4, question 4a."
+                },
+                "4b": {
+                  "type": "string",
+                  "description": "Science Europe core requirement 4, question 4b."
+                },
+                "4c": {
+                  "type": "string",
+                  "description": "Science Europe core requirement 4, question 4c."
+                },
+                "5a": {
+                  "type": "string",
+                  "description": "Science Europe core requirement 5, question 5a."
+                },
+                "5b": {
+                  "type": "string",
+                  "description": "Science Europe core requirement 5, question 5b."
+                },
+                "5c": {
+                  "type": "string",
+                  "description": "Science Europe core requirement 5, question 5c."
+                },
+                "5d": {
+                  "type": "string",
+                  "description": "Science Europe core requirement 5, question 5d."
+                },
+                "6a": {
+                  "type": "string",
+                  "description": "Science Europe core requirement 6, question 6a."
+                },
+                "6b": {
+                  "type": "string",
+                  "description": "Science Europe core requirement 6, question 6b."
+                }
+              }
+            },
+            "versions": {
+              "type": "array",
+              "description": "The saved versions of the plan, numbered from 1 in increasing order.",
+              "items": {
+                "type": "object",
+                "required": [
+                  "version",
+                  "date"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "version": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "date": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "note": {
+                    "type": "string",
+                    "description": "What changed, or why this version was saved."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

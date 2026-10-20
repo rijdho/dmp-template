@@ -1,0 +1,43 @@
+cff-version: 1.2.0
+message: "If you use this tool, please cite it as below."
+title: "Actionable DMP: a data management plan a machine can check"
+abstract: >-
+  A static, client-side web tool and command-line checker for machine-actionable data
+  management plans. It turns the six core requirements and fifteen questions of Science
+  Europe's Practical Guide to the International Alignment of Research Data Management (2021)
+  into dmp.json, a plan that validates against the RDA DMP Common Standard v1.2, and checks
+  what the plan says about each dataset (DOI, access, licence, repository, formats, grant)
+  against the dataset's DOI record at DataCite, in the browser, on the command line, or as a
+  GitHub Action. Code under MIT; schema, examples and texts under CC BY 4.0.
+type: software
+authors:
+  - family-names: "Hartley Belmar"
+    given-names: "Ricardo"
+    alias: rijdho
+    orcid: "https://orcid.org/0000-0001-5058-9309"
+repository-code: "https://github.com/rijdho/dmp-template"
+url: "https://rijdho.github.io/dmp-template/"
+license: MIT
+version: "0.1.0"
+date-released: "2026-10-20"
+keywords:
+  - data management plan
+  - machine-actionable DMP
+  - maDMP
+  - research data
+  - DataCite
+  - open science
+references:
+  - type: report
+    title: "Practical Guide to the International Alignment of Research Data Management (Extended Edition)"
+    authors:
+      - name: "Science Europe"
+    doi: 10.5281/zenodo.4915862
+    year: 2021
+    license: CC-BY-4.0
+  - type: standard
+    title: "RDA DMP Common Standard for machine-actionable Data Management Plans"
+    authors:
+      - name: "RDA DMP Common Standards Working Group"
+    url: "https://github.com/RDA-DMP-Common/RDA-DMP-Common-Standard"
+    version: "1.2"

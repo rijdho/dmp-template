@@ -1,0 +1,87 @@
+{
+  "$schema": "https://rijdho.github.io/dmp-template/schema/dmp.schema.json",
+  "dmp": {
+    "title": "NeuroConsent Data Management Plan",
+    "description": "Worked example: personal and sensitive data under controlled access. All content is synthetic; the DOIs use DataCite's test prefix 10.5072 and resolve nowhere.",
+    "language": "eng",
+    "created": "2026-07-17T09:00:00Z",
+    "modified": "2026-10-20T09:00:00Z",
+    "dmp_id": { "identifier": "urn:uuid:9b2d7e41-0c6a-4f3e-8d15-2a7c4e9f0b13", "type": "other" },
+    "contact": {
+      "name": "Josiah Carberry",
+      "mbox": "contact@example.org",
+      "contact_id": { "identifier": "0000-0002-1825-0097", "type": "orcid" }
+    },
+    "contributor": [
+      { "name": "Example Steward", "mbox": "steward@example.org", "role": ["DataManager"], "contributor_id": { "identifier": "https://example.org/people/steward", "type": "url" } },
+      { "name": "Example Data Protection Officer", "mbox": "dpo@example.org", "role": ["Other"], "contributor_id": { "identifier": "https://example.org/people/dpo", "type": "url" } }
+    ],
+    "ethical_issues_exist": "yes",
+    "ethical_issues_description": "Human participants; approval by the institutional ethics committee is required before data collection.",
+    "cost": [
+      { "title": "Secure storage and controlled-access repository", "value": 3500, "currency_code": "EUR" }
+    ],
+    "project": [
+      {
+        "title": "NeuroConsent",
+        "start": "2026-03-01",
+        "end": "2028-02-28",
+        "funding": [
+          {
+            "funder_id": { "identifier": "https://funder.example.org", "type": "url" },
+            "grant_id": { "identifier": "EXAMPLE-NEURO-004", "type": "other" },
+            "funding_status": "granted"
+          }
+        ]
+      }
+    ],
+    "dataset": [
+      {
+        "title": "Behavioural study responses",
+        "type": "dataset",
+        "description": "Pseudonymised responses of about 400 participants to a behavioural task.",
+        "dataset_id": { "identifier": "10.5072/example.neuroconsent.1", "type": "doi" },
+        "personal_data": "yes",
+        "sensitive_data": "yes",
+        "security_and_privacy": [
+          { "title": "Pseudonymisation", "description": "Direct identifiers are removed; the linking key is held separately under restricted access." },
+          { "title": "Access control and encryption", "description": "Encrypted storage, role-based access, oversight by the data protection officer." }
+        ],
+        "preservation_statement": "Kept for ten years, then reviewed for deletion under the terms of the consent.",
+        "distribution": [
+          {
+            "title": "Behavioural study responses (controlled access)",
+            "description": "Available to researchers on request under a data-sharing agreement.",
+            "data_access": "shared",
+            "issued": "2028-02-28",
+            "format": ["text/csv"],
+            "byte_size": 200000000,
+            "license": [{ "license_ref": "https://creativecommons.org/licenses/by-nc/4.0/", "start_date": "2028-02-28" }],
+            "host": { "title": "Example certified repository", "url": "https://repository.example.org", "pid_system": ["doi"], "certified_with": "coretrustseal" }
+          }
+        ]
+      }
+    ],
+    "actionable_dmp": {
+      "schema_version": "0.1.0",
+      "guide": { "title": "Practical Guide to the International Alignment of Research Data Management", "doi": "10.5281/zenodo.4915861" },
+      "answers": {
+        "1a": "New data are collected from participants through an online behavioural task; no existing data are re-used.",
+        "1b": "Tabular responses in CSV, about 200 MB, and a codebook in PDF.",
+        "2a": "A codebook defines every variable and its units; the deposit carries DataCite metadata and a README.",
+        "2b": "Responses are validated on entry against the task's allowed ranges, and a second person checks a 10% sample.",
+        "3a": "During the project the data are kept on the institution's encrypted research storage, backed up nightly to a second site.",
+        "3b": "Only the three researchers named in the ethics approval have access. The linking key between participants and pseudonyms is kept apart from the data.",
+        "4a": "Processing rests on informed consent under the GDPR. Data are pseudonymised at collection, and the data protection officer reviews the processing record yearly.",
+        "4b": "The data are owned by the project's institution. They are shared under CC BY-NC 4.0, only with researchers who sign the data-sharing agreement.",
+        "4c": "The study is reviewed by the institutional ethics committee before any data are collected, and follows the national code of conduct for research integrity.",
+        "5a": "The pseudonymised responses are deposited at the end of the project with controlled access: researchers apply, and access is granted under a data-sharing agreement.",
+        "5b": "Only the pseudonymised responses and the codebook are kept; the linking key is destroyed at the end of the project. They go to a CoreTrustSeal-certified repository with controlled access.",
+        "5c": "Any tool that reads CSV.",
+        "5d": "The repository assigns a DOI to the deposit, reserved in advance and recorded in this plan.",
+        "6a": "The principal investigator is responsible for the plan; the data steward carries it out, and the data protection officer oversees the personal data.",
+        "6b": "EUR 3,500 for secure storage and the controlled-access repository, and about a month of the data steward's time."
+      }
+    }
+  }
+}

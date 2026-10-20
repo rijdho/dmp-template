@@ -1,0 +1,116 @@
+// Build demo.html: the whole page in one file, to download and open with a double click.
+//
+// Why it exists: until the repository is public, GitHub Pages is not available, and GitHub
+// shows an HTML file in a private repository as source rather than rendering it. A single file
+// travels: the styles, the two Inter fonts (as data: URLs), the theme bootstrap and every module
+// are inlined, and it works from file:// with no server.
+//
+// It is GENERATED from the same sources as index.html. tests/demo.test.mjs fails when the
+// committed demo.html is not what this script produces, so it cannot silently fall behind.
+//
+// The modules are not concatenated: two of them declare a top-level `given`, and ES modules
+// keep such names apart. Each module becomes a function scope that returns its exports, and
+// each import becomes a destructuring of the module it names.
+//
+// The Content-Security-Policy stays as strict as the page's own: the inline style and the two
+// inline scripts are allowed by their SHA-256 hashes, not by 'unsafe-inline', and the only new
+// source is `data:` for the fonts. connect-src keeps DataCite, so the demo checks plans too.
+//
+//   node scripts/build-demo.mjs          write demo.html
+//   node scripts/build-demo.mjs --stdout print it instead
+
+import { createHash } from 'node:crypto';
+import { readFileSync, writeFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+
+const root = new URL('../', import.meta.url);
+const read = (rel) => readFileSync(fileURLToPath(new URL(rel, root)), 'utf8');
+const readBin = (rel) => readFileSync(fileURLToPath(new URL(rel, root)));
+
+/** The modules in dependency order, keyed by the path an import names them by. */
+const MODULES = [
+  'src/requirements.js',
+  'src/madmp-schema.js',
+  'src/jsonschema.js',
+  'src/plan.js',
+  'src/evidence.js',
+  'src/diff.js',
+  'src/datacite.js',
+  'src/report.js',
+  'src/i18n/en.js',
+  'src/i18n/index.js',
+  'src/app.js',
+];
+
+/** Resolve `./x.js?v=N` relative to the importing module into a MODULES key. */
+function resolveSpecifier(from, specifier) {
+  const clean = specifier.replace(/\?v=\d+$/, '');
+  return new URL(clean, new URL(from, 'file:///')).pathname.slice(1);
+}
+
+/** One module as a function scope: imports destructured, exports returned. */
+export function wrapModule(path, source) {
+  const exported = [];
+  let body = source.replace(
+    /^import\s*\{([^}]*)\}\s*from\s*'([^']+)';/gm,
+    (whole, names, spec) => {
+      const target = resolveSpecifier(path, spec);
+      if (!MODULES.includes(target)) throw new Error(`${path} imports ${target}, which the demo does not bundle`);
+      const bindings = names.split(',').map((n) => n.trim()).filter(Boolean)
+        .map((n) => n.replace(/\s+as\s+/, ': '));
+      return `const { ${bindings.join(', ')} } = __modules[${JSON.stringify(target)}];`;
+    },
+  );
+  body = body.replace(/^export\s+(const|let|function|class|async function)\s+([A-Za-z_$][\w$]*)/gm, (whole, kind, name) => {
+    exported.push(name);
+    return `${kind} ${name}`;
+  });
+  if (/^\s*(import|export)\b/m.test(body)) throw new Error(`${path} uses an import or export form the demo cannot bundle`);
+  return `__modules[${JSON.stringify(path)}] = (() => {\n${body}\nreturn { ${exported.join(', ')} };\n})();`;
+}
+
+const sha256 = (text) => `'sha256-${createHash('sha256').update(text, 'utf8').digest('base64')}'`;
+const woff2 = (rel) => `data:font/woff2;base64,${readBin(rel).toString('base64')}`;
+
+export function buildDemo() {
+  let html = read('index.html');
+
+  // Styles: house.css with its fonts inlined, then the page's own.
+  const house = read('house/house.css')
+    .replace('url("./fonts/inter-latin-wght-normal.woff2")', `url("${woff2('house/fonts/inter-latin-wght-normal.woff2')}")`)
+    .replace('url("./fonts/inter-latin-ext-wght-normal.woff2")', `url("${woff2('house/fonts/inter-latin-ext-wght-normal.woff2')}")`);
+  if (house.includes('./fonts/')) throw new Error('house.css references a font the demo does not inline');
+  const css = `${house}\n${read('style.css')}`;
+
+  const boot = read('src/theme-boot.js');
+  const app = `"use strict";\nconst __modules = {};\n${MODULES.map((m) => wrapModule(m, read(m))).join('\n\n')}\n`;
+
+  const swap = (pattern, replacement) => {
+    if (!pattern.test(html)) throw new Error(`index.html no longer matches ${pattern}`);
+    html = html.replace(pattern, replacement);
+  };
+  swap(/\s*<link rel="stylesheet" href="\.\/house\/house\.css\?v=\d+" \/>\n\s*<link rel="stylesheet" href="\.\/style\.css\?v=\d+" \/>/,
+    () => `\n  <style>\n${css}</style>`);
+  swap(/<script src="\.\/src\/theme-boot\.js\?v=\d+"><\/script>/, () => `<script>\n${boot}</script>`);
+  swap(/<script type="module" src="\.\/src\/app\.js\?v=\d+"><\/script>/, () => `<script>\n${app}</script>`);
+  swap(/<!-- The shared look \(a synced copy of the house style\), then this tool's own styles\. -->\n/,
+    () => '<!-- demo.html: generated by scripts/build-demo.mjs from index.html and its sources. Do not edit. -->\n');
+  // Relative links that only work next to the other files point at the repository instead.
+  swap(/href="\.\/schema\/(dmp\.schema|maDMP-schema-1\.2)\.json"/g, (whole, name) => `href="https://github.com/rijdho/dmp-template/blob/main/schema/${name}.json"`);
+  swap(/href="\.\/"/g, () => 'href="#"');
+
+  // The policy: the page's own, with hashes for the inline code and data: for the fonts.
+  swap(/script-src 'self';/, () => `script-src ${sha256(`\n${boot}`)} ${sha256(`\n${app}`)};`);
+  swap(/style-src 'self';/, () => `style-src ${sha256(`\n${css}`)};`);
+  swap(/font-src 'self';/, () => "font-src data:;");
+  return html;
+}
+
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  const html = buildDemo();
+  if (process.argv.includes('--stdout')) process.stdout.write(html);
+  else {
+    writeFileSync(fileURLToPath(new URL('demo.html', root)), html);
+    console.log(`demo.html written (${Math.round(html.length / 1024)} KB)`);
+  }
+}

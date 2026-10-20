@@ -1,0 +1,15 @@
+.DS_Store
+node_modules/
+dist/
+.wrangler/
+
+# Per-machine tool permissions and session state: local-only, never committed
+.claude/
+
+# Sensitive/local-only material: never committed (house rule, see github/CLAUDE.md)
+_ref/
+
+# Local secrets, should any ever appear
+.env
+.env.*
+.dev.vars

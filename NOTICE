@@ -1,0 +1,24 @@
+dmp-template (Actionable DMP)
+Copyright 2026 Ricardo Hartley Belmar
+
+The code (index.html, style.css, src/, bin/, scripts/, tests/, action.yml) is licensed under
+the MIT License (LICENSE), except src/madmp-schema.js (see below). Commits up to 635778c
+(2026-10-20) were published under the Apache License, Version 2.0, and remain so.
+
+The extension schema (schema/dmp.schema.json), the examples (examples/) and the texts (the
+interface strings in src/i18n/ and the documentation) are licensed under the Creative Commons
+Attribution 4.0 International License (CC BY 4.0): https://creativecommons.org/licenses/by/4.0/
+
+The section titles, questions and guidance in src/i18n/en.js, and the six core requirements in
+src/requirements.js, are taken from:
+  Science Europe (2021). Practical Guide to the International Alignment of Research Data
+  Management (Extended Edition). Zenodo. https://doi.org/10.5281/zenodo.4915862
+  licensed under CC BY 4.0.
+
+schema/maDMP-schema-1.2.json, its copy as a module in src/madmp-schema.js, and the examples in
+tests/fixtures/rda/ come unchanged from the RDA DMP Common Standard for machine-actionable Data
+Management Plans, https://github.com/RDA-DMP-Common/RDA-DMP-Common-Standard, released into the
+public domain under the Unlicense.
+
+house/fonts/: Inter, by Rasmus Andersson,
+under the SIL Open Font License 1.1.
