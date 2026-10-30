@@ -9,6 +9,7 @@ abstract: >-
   what the plan says about each dataset (DOI, access, licence, repository, formats, grant)
   against the dataset's DataCite record, where DataCite holds it, in the browser, on the command line, or as a
   GitHub Action. Code under MIT; schema, examples and texts under CC BY 4.0.
+  It runs at https://rijdho.github.io/dmp-template/.
 type: software
 authors:
   - family-names: "Hartley Belmar"
